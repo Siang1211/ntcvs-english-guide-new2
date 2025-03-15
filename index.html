@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>英語學習平台 | 台南高商劉翔承製作</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --secondary: #10b981;
+            --accent: #f59e0b;
+            --background: #f8fafc;
+            --text: #1e293b;
+            --success: #22c55e;
+            --error: #ef4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary), #1d4ed8);
+            color: white;
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .main-content {
+            margin-top: 80px;
+            padding: 2rem 0;
+        }
+
+        .learning-paths {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .path-card {
+            background: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        .path-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .path-card h3 {
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 9999px;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+
+        .progress {
+            height: 100%;
+            background: var(--success);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .interactive-area {
+            background: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .question-container {
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .option-button {
+            background: white;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .option-button:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .option-button.correct {
+            background: var(--success);
+            border-color: var(--success);
+            color: white;
+        }
+
+        .option-button.wrong {
+            background: var(--error);
+            border-color: var(--error);
+            color: white;
+        }
+
+        .footer {
+            background: #1e293b;
+            color: white;
+            padding: 2rem 0;
+            margin-top: 4rem;
+        }
+
+        .credit {
+            text-align: center;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+        }
+
+        .phonetic {
+            color: var(--text);
+            opacity: 0.7;
+            margin: 0.5rem 0;
+        }
+
+        .meaning {
+            margin: 2rem 0;
+        }
+
+        .examples {
+            margin: 1rem 0;
+            font-style: italic;
+        }
+
+        .rules-list {
+            list-style: none;
+            margin: 1rem 0;
+            text-align: left;
+        }
+
+        .rules-list li {
+            margin: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .rules-list li:before {
+            content: "•";
+            position: absolute;
+            left: 0.5rem;
+            color: var(--primary);
+        }
+
+        .dialog-script {
+            text-align: left;
+            margin: 2rem 0;
+            padding: 1rem;
+            background: #f8fafc;
+            border-radius: 0.5rem;
+        }
+
+        .dialog-script p {
+            margin: 0.5rem 0;
+        }
+
+        .feedback {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 1rem 2rem;
+            background-color: var(--success);
+            color: white;
+            border-radius: 0.5rem;
+            z-index: 1000;
+            animation: fadeInOut 2s ease-in-out;
+        }
+
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+            20% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            80% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            100% { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container header-content">
+            <div class="logo">英語學習平台</div>
+            <nav class="nav-menu">
+                <a href="#vocabulary" class="nav-link">單字學習</a>
+                <a href="#listening" class="nav-link">聽力練習</a>
+                <a href="#grammar" class="nav-link">文法測驗</a>
+                <a href="#progress" class="nav-link">學習進度</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content container">
+        <section class="learning-paths">
+            <div class="path-card" data-path="vocabulary">
+                <h3>單字學習</h3>
+                <p>透過互動式卡片學習常考單字</p>
+                <div class="progress-bar">
+                    <div class="progress" style="width: 30%"></div>
+                </div>
+                <p>完成度: 30%</p>
+            </div>
+
+            <div class="path-card" data-path="listening">
+                <h3>聽力練習</h3>
+                <p>提升英語聽力理解能力</p>
+                <div class="progress-bar">
+                    <div class="progress" style="width: 45%"></div>
+                </div>
+                <p>完成度: 45%</p>
+            </div>
+
+            <div class="path-card" data-path="grammar">
+                <h3>文法測驗</h3>
+                <p>掌握重要文法概念</p>
+                <div class="progress-bar">
+                    <div class="progress" style="width: 60%"></div>
+                </div>
+                <p>完成度: 60%</p>
+            </div>
+        </section>
+
+        <section class="interactive-area" id="learningArea">
+            <div class="question-container">
+                <h2>開始學習！</h2>
+                <p>選擇上方學習路徑開始你的學習之旅</p>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="credit">
+                <p> 2024 英語學習平台</p>
+                <p>台南高商劉翔承製作</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Content Data
+        const vocabularyContent = {
+            basic: [
+                {
+                    word: "abandon",
+                    phonetic: "/əˈbændən/",
+                    meanings: [
+                        {
+                            partOfSpeech: "v.",
+                            definition: "放棄、遺棄",
+                            examples: [
+                                "He would never abandon his dream of becoming a doctor.",
+                                "她永遠不會放棄成為醫生的夢想。"
+                            ]
+                        }
+                    ],
+                    level: "basic",
+                    examYear: "111統測"
+                },
+                {
+                    word: "brilliant",
+                    phonetic: "/ˈbrɪljənt/",
+                    meanings: [
+                        {
+                            partOfSpeech: "adj.",
+                            definition: "傑出的、燦爛的",
+                            examples: [
+                                "She came up with a brilliant solution.",
+                                "她想出了一個絕妙的解決方案。"
+                            ]
+                        }
+                    ],
+                    level: "basic",
+                    examYear: "110統測"
+                }
+            ]
+        };
+
+        const grammarContent = {
+            basic: [
+                {
+                    title: "現在簡單式",
+                    rules: [
+                        "第三人稱單數要加 s",
+                        "否定句要加 don't/doesn't",
+                        "疑問句將 do/does 放在句首"
+                    ],
+                    examples: [
+                        {
+                            english: "He plays basketball every day.",
+                            chinese: "他每天打籃球。"
+                        },
+                        {
+                            english: "I don't like coffee.",
+                            chinese: "我不喜歡咖啡。"
+                        }
+                    ]
+                }
+            ]
+        };
+
+        const listeningContent = {
+            basic: [
+                {
+                    title: "日常對話",
+                    situation: "在咖啡店點餐",
+                    audio: "coffee-shop-order.mp3",
+                    script: [
+                        {
+                            speaker: "Customer",
+                            text: "I'd like a cup of coffee, please."
+                        },
+                        {
+                            speaker: "Barista",
+                            text: "Would you like it hot or iced?"
+                        }
+                    ],
+                    questions: [
+                        {
+                            question: "What does the customer want?",
+                            options: ["Tea", "Coffee", "Juice", "Water"],
+                            correct: 1
+                        }
+                    ]
+                }
+            ]
+        };
+
+        // Main Application
+        class EnglishLearningApp {
+            constructor() {
+                this.currentModule = null;
+                this.currentLesson = null;
+                this.score = 0;
+                this.progress = {
+                    vocabulary: 30,
+                    listening: 45,
+                    grammar: 60
+                };
+                this.initializeEventListeners();
+            }
+
+            initializeEventListeners() {
+                document.querySelectorAll('.path-card').forEach(card => {
+                    card.addEventListener('click', (e) => {
+                        const path = e.currentTarget.dataset.path;
+                        this.startLesson(path);
+                    });
+                });
+            }
+
+            startLesson(type) {
+                this.currentModule = type;
+                const learningArea = document.getElementById('learningArea');
+                
+                switch(type) {
+                    case 'vocabulary':
+                        this.startVocabularyLesson();
+                        break;
+                    case 'listening':
+                        this.startListeningLesson();
+                        break;
+                    case 'grammar':
+                        this.startGrammarLesson();
+                        break;
+                }
+            }
+
+            startVocabularyLesson() {
+                const word = vocabularyContent.basic[0]; // For demo, using first word
+                const content = `
+                    <div class="question-container">
+                        <h2>${word.word}</h2>
+                        <p class="phonetic">${word.phonetic}</p>
+                        <div class="meaning">
+                            <h3>${word.meanings[0].partOfSpeech} ${word.meanings[0].definition}</h3>
+                            <div class="examples">
+                                <p>${word.meanings[0].examples[0]}</p>
+                                <p>${word.meanings[0].examples[1]}</p>
+                            </div>
+                        </div>
+                        <div class="options-grid">
+                            <button class="option-button" onclick="app.checkVocabularyAnswer(true)">我會了</button>
+                            <button class="option-button" onclick="app.checkVocabularyAnswer(false)">再複習</button>
+                        </div>
+                    </div>
+                `;
+                this.updateLearningArea(content);
+            }
+
+            startGrammarLesson() {
+                const grammar = grammarContent.basic[0];
+                const content = `
+                    <div class="question-container">
+                        <h2>${grammar.title}</h2>
+                        <ul class="rules-list">
+                            ${grammar.rules.map(rule => `<li>${rule}</li>`).join('')}
+                        </ul>
+                        <div class="examples">
+                            ${grammar.examples.map(ex => `
+                                <div class="example">
+                                    <p>${ex.english}</p>
+                                    <p>${ex.chinese}</p>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <div class="options-grid">
+                            <button class="option-button" onclick="app.startGrammarQuiz()">開始練習</button>
+                        </div>
+                    </div>
+                `;
+                this.updateLearningArea(content);
+            }
+
+            startListeningLesson() {
+                const listening = listeningContent.basic[0];
+                const content = `
+                    <div class="question-container">
+                        <h2>${listening.title}: ${listening.situation}</h2>
+                        <div class="audio-player">
+                            <audio controls>
+                                <source src="/static/audio/${listening.audio}" type="audio/mp3">
+                                您的瀏覽器不支援音訊播放。
+                            </audio>
+                        </div>
+                        <div class="dialog-script">
+                            ${listening.script.map(line => `
+                                <p><strong>${line.speaker}:</strong> ${line.text}</p>
+                            `).join('')}
+                        </div>
+                        <div class="options-grid">
+                            ${listening.questions[0].options.map((option, index) => `
+                                <button class="option-button" onclick="app.checkListeningAnswer(${index})">${option}</button>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+                this.updateLearningArea(content);
+            }
+
+            updateLearningArea(content) {
+                const learningArea = document.getElementById('learningArea');
+                learningArea.innerHTML = content;
+            }
+
+            checkVocabularyAnswer(known) {
+                const message = known ? 
+                    '太好了！繼續保持！' : 
+                    '沒關係，讓我們繼續練習！';
+                
+                this.showFeedback(message);
+                this.updateProgress('vocabulary', known ? 5 : 0);
+            }
+
+            checkListeningAnswer(selectedIndex) {
+                const correct = listeningContent.basic[0].questions[0].correct;
+                const isCorrect = selectedIndex === correct;
+                
+                this.showFeedback(isCorrect ? '答對了！' : '再試一次！');
+                this.updateProgress('listening', isCorrect ? 5 : 0);
+            }
+
+            startGrammarQuiz() {
+                const content = `
+                    <div class="question-container">
+                        <h2>文法測驗</h2>
+                        <p>選擇正確的答案：</p>
+                        <p class="question">She _____ to school every day.</p>
+                        <div class="options-grid">
+                            <button class="option-button" onclick="app.checkGrammarAnswer(0)">go</button>
+                            <button class="option-button" onclick="app.checkGrammarAnswer(1)">goes</button>
+                            <button class="option-button" onclick="app.checkGrammarAnswer(2)">going</button>
+                            <button class="option-button" onclick="app.checkGrammarAnswer(3)">went</button>
+                        </div>
+                    </div>
+                `;
+                this.updateLearningArea(content);
+            }
+
+            checkGrammarAnswer(selectedIndex) {
+                const isCorrect = selectedIndex === 1; // "goes" is correct
+                this.showFeedback(isCorrect ? '答對了！' : '再試一次！');
+                this.updateProgress('grammar', isCorrect ? 5 : 0);
+            }
+
+            showFeedback(message) {
+                const feedback = document.createElement('div');
+                feedback.className = 'feedback';
+                feedback.textContent = message;
+                
+                document.body.appendChild(feedback);
+                setTimeout(() => feedback.remove(), 2000);
+            }
+
+            updateProgress(type, increment) {
+                this.progress[type] = Math.min(100, this.progress[type] + increment);
+                const progressBar = document.querySelector(`.path-card[data-path="${type}"] .progress`);
+                const progressText = document.querySelector(`.path-card[data-path="${type}"] p:last-child`);
+                
+                if (progressBar && progressText) {
+                    progressBar.style.width = `${this.progress[type]}%`;
+                    progressText.textContent = `完成度: ${this.progress[type]}%`;
+                }
+            }
+        }
+
+        // Initialize the app
+        const app = new EnglishLearningApp();
+    </script>
+</body>
+</html>
